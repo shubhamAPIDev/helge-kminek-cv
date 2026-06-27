@@ -1,37 +1,45 @@
 # Dr. Helge Kminek — Lebenslauf
 
-Academic CV for **Dr. Helge Kminek**, using the [arasgungore-CV](https://github.com/arasgungore/arasgungore-CV) LaTeX template **strictly** (same macros and layout code), filled with Helge's data.
+LaTeX source for the academic curriculum vitae (Lebenslauf) of **Dr. Helge Kminek**.
 
-## Structure
+## Files
 
-| File | Role |
-|------|------|
-| `main.tex` | arasgungore preamble, commands, and header (unchanged template code) |
-| `sections/body.tex` | Helge's CV content using `\resumeSubheading`, `\resumeItem`, etc. |
+| File | Description |
+|------|-------------|
+| `main.tex` | Document setup, layout commands, and contact header |
+| `sections/body.tex` | CV sections (education, career, publications, talks, etc.) |
 
-## arasgungore macros used
+## Compile
 
-- `\resumeSubheading` — Qualifikationen, Berufliche Laufbahn, Gutachtertätigkeiten, …
-- `\resumeSubSubheading` — semester groups, subsections
-- `\resumeProjectHeading` — publication subsections (Monographien, Poster, …)
-- `\resumeItem` / `\resumeItemListStart` — course lists, publications, talks, memberships
+### Overleaf
 
-## Compile (Overleaf)
+1. Upload `main.tex` and the `sections/` folder.
+2. Set the compiler to **pdfLaTeX**.
+3. Recompile (run twice if cross-references are used).
 
-1. Upload `main.tex` + `sections/body.tex`
-2. Compiler: **pdfLaTeX**
-3. Recompile
+### Local
 
 ```bash
 pdflatex main.tex
 pdflatex main.tex
 ```
 
-## Note
+Output: `main.pdf`
 
-Helge's full academic CV is long (~many pages). arasgungore's original template is a short 2-page résumé; the **same code patterns** are applied throughout, but the document is longer because of the amount of content.
+## Sections
 
-## Credits
+- Qualifikationen
+- Berufliche Laufbahn
+- Verzeichnis der Lehrveranstaltungen
+- Publikationsverzeichnis
+- Vorträge
+- Veranstaltungen — Organisation und Mitwirkung
+- Funktionen und Gutachtertätigkeiten
+- Eingeworbene Dritt- und Fördermittel
+- Gremienarbeit
+- Fellowships
+- Mitgliedschaften und außeruniversitäres Engagement
 
-- **Template:** [arasgungore/arasgungore-CV](https://github.com/arasgungore/arasgungore-CV) (MIT)
-- **Content:** Dr. Helge Kminek
+## License
+
+See [LICENSE](LICENSE). CV content © Dr. Helge Kminek.
