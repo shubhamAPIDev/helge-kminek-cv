@@ -18,10 +18,27 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{fancyhdr}
 \usepackage[ngerman]{babel}
+\usepackage{array}
 \usepackage{tabularx}
 \usepackage{hyphenat}
 \usepackage{fontawesome}
+\usepackage{microtype}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 \input{glyphtounicode}
+
+% Wrapping columns for long German CV lines (arasgungore uses l/r which do not wrap)
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newlength{\resumeTableWidth}
+\setlength{\resumeTableWidth}{0.97\textwidth}
+\newlength{\resumeLeftWidth}
+\setlength{\resumeLeftWidth}{0.73\resumeTableWidth}
+\newlength{\resumeRightWidth}
+\setlength{\resumeRightWidth}{0.22\resumeTableWidth}
+\newlength{\resumeFullWidth}
+\setlength{\resumeFullWidth}{0.97\textwidth}
+\emergencystretch=2em
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -48,14 +65,14 @@
 \pdfgentounicode=1
 
 \newcommand{\resumeItem}[1]{
-  \item\small{
-    {#1 \vspace{-2pt}}
+  \item\small\raggedright{
+    #1 \vspace{-2pt}
   }
 }
 
 \newcommand{\resumeSubheading}[4]{
   \vspace{-2pt}\item
-    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \begin{tabular*}{\resumeTableWidth}[t]{L{\resumeLeftWidth}@{\extracolsep{\fill}}R{\resumeRightWidth}}
       \textbf{#1} & #2 \\
       \textit{\small#3} & \textit{\small #4} \\
     \end{tabular*}\vspace{-7pt}
@@ -63,14 +80,14 @@
 
 \newcommand{\resumeSubSubheading}[2]{
     \vspace{-2pt}\item
-    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+    \begin{tabular*}{\resumeTableWidth}[t]{L{\resumeLeftWidth}@{\extracolsep{\fill}}R{\resumeRightWidth}}
       \textit{\small#1} & \textit{\small #2} \\
     \end{tabular*}\vspace{-7pt}
 }
 
 \newcommand{\resumeEducationHeading}[6]{
   \vspace{-2pt}\item
-    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \begin{tabular*}{\resumeTableWidth}[t]{L{\resumeLeftWidth}@{\extracolsep{\fill}}R{\resumeRightWidth}}
       \textbf{#1} & #2 \\
       \textit{\small#3} & \textit{\small #4} \\
       \textit{\small#5} & \textit{\small #6} \\
@@ -79,16 +96,16 @@
 
 \newcommand{\resumeProjectHeading}[2]{
     \vspace{-2pt}\item
-    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+    \begin{tabular*}{\resumeTableWidth}[t]{L{\resumeFullWidth}@{\extracolsep{\fill}}r}
       \small#1 & #2 \\
     \end{tabular*}\vspace{-7pt}
 }
 
 \newcommand{\resumeOrganizationHeading}[4]{
   \vspace{-2pt}\item
-    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \begin{tabular*}{\resumeTableWidth}[t]{L{\resumeLeftWidth}@{\extracolsep{\fill}}R{\resumeRightWidth}}
       \textbf{#1} & \textit{\small #2} \\
-      \textit{\small#3}
+      \multicolumn{2}{L{\resumeTableWidth}}{\textit{\small#3}} \\
     \end{tabular*}\vspace{-7pt}
 }
 
