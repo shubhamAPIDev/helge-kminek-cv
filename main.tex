@@ -1,0 +1,167 @@
+%-------------------------
+% Lebenslauf — Dr. Helge Kminek
+% Layout based on arasgungore-CV (MIT License)
+% https://github.com/arasgungore/arasgungore-CV
+% Content: Dr. Helge Kminek
+% Compile with pdfLaTeX or XeLaTeX (Overleaf: pdfLaTeX default works)
+%-------------------------
+
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[table]{xcolor}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[ngerman]{babel}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{hyphenat}
+\usepackage{fontawesome}
+\usepackage{microtype}
+\input{glyphtounicode}
+
+% ---------- palette (tables + timeline accents) ----------
+\definecolor{navy}{HTML}{1F3864}
+\definecolor{cvblue}{HTML}{2E75B6}
+\definecolor{cvgrey}{HTML}{595959}
+\definecolor{lightgrey}{HTML}{F2F2F2}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% A4 margins (arasgungore-style tight layout)
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+\setlength{\parindent}{0pt}
+\emergencystretch=2em
+
+% Section formatting (from arasgungore-CV)
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+\titleformat{\subsection}{
+  \bfseries\color{cvblue}
+}{}{0em}{}
+
+\titlespacing{\subsection}{0pt}{10pt}{4pt}
+
+\pdfgentounicode=1
+
+%-------------------------
+% arasgungore resume commands
+%-------------------------
+
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeEducationHeading}[6]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+      \textit{\small#5} & \textit{\small #6} \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------
+% Helge CV timeline commands (for imported body content)
+%-------------------------
+
+\newlength{\cvdatewidth}
+\newlength{\cvcolumngap}
+\newlength{\cvdescwidth}
+\setlength{\cvdatewidth}{3.6cm}
+\setlength{\cvcolumngap}{0.35cm}
+\newlength{\cvbodyindent}
+\setlength{\cvbodyindent}{\dimexpr\cvdatewidth+\cvcolumngap\relax}
+
+\newcommand{\cvitem}[2]{%
+  \par\vspace{4pt}%
+  \noindent
+  \setlength{\cvdescwidth}{\dimexpr\linewidth-\cvdatewidth-\cvcolumngap\relax}%
+  \begin{minipage}[t]{\cvdatewidth}\vspace{0pt}\raggedright\bfseries\color{navy}\small #1\end{minipage}%
+  \hspace{\cvcolumngap}%
+  \begin{minipage}[t]{\cvdescwidth}\vspace{0pt}\raggedright\small #2\end{minipage}%
+  \par
+}
+
+\newcommand{\cvsubhead}[1]{\par\vspace{4pt}\noindent\hspace{\cvbodyindent}{\bfseries\color{navy}\small #1}\par\vspace{2pt}}
+\newcommand{\cvausblick}[1]{\par\vspace{4pt}\noindent\hspace{\cvbodyindent}{\itshape\color{cvgrey}\small #1}\par\vspace{2pt}}
+
+\newcommand{\pubitem}[1]{\par\vspace{4pt}\noindent\hspace{\cvbodyindent}\parbox[t]{\dimexpr\linewidth-\cvbodyindent\relax}{\raggedright\hangindent=1.2em\hangafter=1 #1}\par}
+
+\setlist[enumerate]{leftmargin=\cvbodyindent, itemsep=4pt, topsep=4pt, label=\arabic*.}
+\setlist[itemize]{leftmargin=\cvbodyindent, itemsep=3pt, topsep=4pt, label=\textendash}
+
+%-------------------------------------------
+\begin{document}
+
+%---------- HEADING (arasgungore style) ----------
+
+\begin{center}
+    \textbf{\Huge \scshape Dr.\ Helge Kminek} \\ \vspace{3pt}
+    \small\textit{Lebenslauf} \\ \vspace{6pt}
+    \small
+    \faMapMarker \hspace{.5pt} Alpen-Adria-Universität Klagenfurt, Sterneckstraße 15, A-9020 Klagenfurt
+    $|$
+    \faMapMarker \hspace{.5pt} Mathildenstraße 5, 55116 Mainz
+    \\ \vspace{3pt}
+    \faAt \hspace{.5pt} \href{mailto:HelgeKminek@posteo.de}{HelgeKminek@posteo.de}
+    $|$
+    \faAt \hspace{.5pt} \href{mailto:Helge.Kminek@aau.at}{Helge.Kminek@aau.at}
+    \\ \vspace{3pt}
+    Geboren am 10.02.1980 in Offenbach am Main
+\end{center}
+
+\vspace{6pt}
+
+%---------- BODY (Helge Kminek data) ----------
+\input{sections/body.tex}
+
+\end{document}
