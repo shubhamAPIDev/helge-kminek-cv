@@ -1,5 +1,8 @@
 %-------------------------
-% Lebenslauf — Dr. Helge Kminek
+% Resume in LaTeX
+% Template: Aras Gungore (MIT License)
+% https://github.com/arasgungore/arasgungore-CV
+% Content: Dr. Helge Kminek
 % Compile: pdflatex main.tex
 %------------------------
 
@@ -15,7 +18,6 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{fancyhdr}
 \usepackage[ngerman]{babel}
-\usepackage{etoolbox}
 \usepackage{array}
 \usepackage{tabularx}
 \usepackage{hyphenat}
@@ -25,7 +27,7 @@
 \usepackage[utf8]{inputenc}
 \input{glyphtounicode}
 
-% Wrapping columns for long German CV lines
+% Wrapping columns for long German CV lines (arasgungore uses l/r which do not wrap)
 \newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 \newlength{\resumeTableWidth}
@@ -68,23 +70,12 @@
   }
 }
 
-\newcommand{\resumeSubheading}[4]{%
+\newcommand{\resumeSubheading}[4]{
   \vspace{-2pt}\item
-  \begin{tabular*}{\resumeTableWidth}[t]{L{\resumeLeftWidth}@{\extracolsep{\fill}}R{\resumeRightWidth}}
-    \ifstrempty{#1}{%
-      & \textbf{\small #2} \\[-2pt]
-      \multicolumn{2}{L{\resumeTableWidth}}{\small #3\ifstrempty{#4}{}{ \textit{#4}}} \\%
-    }{%
-      \textbf{#1} & \textbf{\small #2} \\%
-      \ifstrempty{#3}{%
-        \ifstrempty{#4}{}{%
-          \textit{\small#3} & \textit{\small #4} \\%
-        }%
-      }{%
-        \textit{\small#3} & \textit{\small #4} \\%
-      }%
-    }%
-  \end{tabular*}\vspace{-4pt}%
+    \begin{tabular*}{\resumeTableWidth}[t]{L{\resumeLeftWidth}@{\extracolsep{\fill}}R{\resumeRightWidth}}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
 }
 
 \newcommand{\resumeSubSubheading}[2]{
@@ -122,10 +113,10 @@
 
 \renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
 
-\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}, itemsep=2pt, topsep=2pt, parsep=0pt]}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
 \newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
-\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.15in, itemsep=2pt, topsep=2pt, parsep=0pt]}
-\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-2pt}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
 
 \begin{document}
 
