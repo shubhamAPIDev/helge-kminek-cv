@@ -1,41 +1,73 @@
-%!TEX program = xelatex
-% ============================================================================
-%  Dr. Helge Kminek — Lebenslauf
-%  Compile with XeLaTeX (Overleaf: Menu → Compiler → XeLaTeX)
-%  Content in sections/body.tex
-% ============================================================================
-\documentclass[11pt,a4paper]{article}
+%-------------------------
+% Lebenslauf — Dr. Helge Kminek
+% Layout: arasgungore-CV (MIT License)
+% https://github.com/arasgungore/arasgungore-CV
+% Compile with pdfLaTeX (same as arasgungore)
+%-------------------------
 
-\usepackage{fontspec}
-\setmainfont{TeX Gyre Heros}
+\documentclass[a4paper,11pt]{article}
 
-\usepackage{babel}
-\babelprovide[main,import]{ngerman}
-
-\usepackage[a4paper,margin=2cm]{geometry}
-\usepackage[table]{xcolor}
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
 \usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[table]{xcolor}
+\usepackage{verbatim}
 \usepackage{enumitem}
-\usepackage{longtable}
-\usepackage{array}
+\usepackage[hidelinks]{hyperref}
 \usepackage{fancyhdr}
 \usepackage{lastpage}
+\usepackage[ngerman]{babel}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{hyphenat}
+\usepackage{fontawesome}
 \usepackage{microtype}
+\input{glyphtounicode}
 
-% ---------- palette ----------
+% ---------- palette (tables + timeline) ----------
 \definecolor{navy}{HTML}{1F3864}
 \definecolor{cvblue}{HTML}{2E75B6}
 \definecolor{cvgrey}{HTML}{595959}
 \definecolor{lightgrey}{HTML}{F2F2F2}
 
-% ---------- section styling ----------
-\titleformat{\section}{\Large\bfseries\color{navy}}{}{0em}{}[{\color{cvblue}\titlerule[1pt]}]
-\titlespacing{\section}{0pt}{16pt}{8pt}
-\titleformat{\subsection}{\bfseries\color{cvblue}}{}{0em}{}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\small\color{cvgrey}Dr.\ Helge Kminek -- Lebenslauf \textperiodcentered\ Seite \thepage\ von \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% A4 margins (arasgungore-style)
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+\setlength{\parindent}{0pt}
+\emergencystretch=2em
+
+% Sections (arasgungore-CV)
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+\titleformat{\subsection}{
+  \bfseries\color{cvblue}
+}{}{0em}{}
+
 \titlespacing{\subsection}{0pt}{10pt}{4pt}
 \setcounter{secnumdepth}{0}
 
-% ---------- CV timeline entry ----------
+\pdfgentounicode=1
+
+% ---------- Helge CV body commands (for sections/body.tex) ----------
 \newlength{\cvdatewidth}
 \newlength{\cvcolumngap}
 \newlength{\cvdescwidth}
@@ -61,32 +93,27 @@
 \setlist[enumerate]{leftmargin=\cvbodyindent, itemsep=4pt, topsep=4pt, label=\arabic*.}
 \setlist[itemize]{leftmargin=\cvbodyindent, itemsep=3pt, topsep=4pt, label=\textendash}
 
-% ---------- header/footer ----------
-\pagestyle{fancy}
-\fancyhf{}
-\fancyfoot[C]{\small\color{cvgrey}Dr.\ Helge Kminek -- Lebenslauf \textperiodcentered\ Seite \thepage\ von \pageref{LastPage}}
-\renewcommand{\headrulewidth}{0pt}
-\renewcommand{\footrulewidth}{0pt}
-
-\setlength{\tabcolsep}{4pt}
-\setlength{\parindent}{0pt}
-\emergencystretch=2em
-
+%-------------------------------------------
 \begin{document}
 
-\raggedright
+%---------- HEADING (arasgungore style) ----------
 
-% ---------- title block ----------
-{\fontsize{26}{30}\selectfont\bfseries\color{navy}Dr.\ Helge Kminek\par}
-\vspace{1pt}
-{\itshape\color{cvgrey}\large Lebenslauf\par}
-\vspace{2pt}\textcolor{cvblue}{\rule{\linewidth}{0.8pt}}\vspace{6pt}
-{\small\color{cvgrey}
-Geburtsdatum und -ort: 10.02.1980, Offenbach am Main\\
-Dienstlich: Alpen-Adria-Universität Klagenfurt · Institut für Unterrichts- und Schulentwicklung · Sterneckstraße 15 · A-9020 Klagenfurt\\
-Privat: Mathildenstraße 5 · 55116 Mainz\\
-E-Mail: HelgeKminek@posteo.de · Helge.Kminek@aau.at\\
-}\vspace{6pt}
+\begin{center}
+    \textbf{\Huge \scshape Dr.\ Helge Kminek} \\ \vspace{3pt}
+    \small\textit{Lebenslauf} \\ \vspace{6pt}
+    \small
+    \faMapMarker \hspace{.5pt} AAU Klagenfurt, Sterneckstra{\ss}e 15, A-9020 Klagenfurt
+    $|$
+    \faMapMarker \hspace{.5pt} Mathildenstra{\ss}e 5, 55116 Mainz
+    \\ \vspace{3pt}
+    \faAt \hspace{.5pt} \href{mailto:HelgeKminek@posteo.de}{HelgeKminek@posteo.de}
+    $|$
+    \faAt \hspace{.5pt} \href{mailto:Helge.Kminek@aau.at}{Helge.Kminek@aau.at}
+    \\ \vspace{3pt}
+    Geboren am 10.02.1980 in Offenbach am Main
+\end{center}
+
+\vspace{6pt}
 
 \input{sections/body.tex}
 

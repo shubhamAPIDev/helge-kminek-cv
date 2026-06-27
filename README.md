@@ -20,14 +20,14 @@ helge-kminek-cv/
 ### Overleaf
 
 1. Upload this repository (or `main.tex` + `sections/` folder).
-2. Compiler: **XeLaTeX** (required for the TeX Gyre Heros font).
+2. Compiler: **pdfLaTeX** (same as [arasgungore-CV](https://github.com/arasgungore/arasgungore-CV)).
 3. Recompile twice if references/tables need a second pass.
 
 ### Local (TeX Live / MacTeX)
 
 ```bash
-xelatex main.tex
-xelatex main.tex
+pdflatex main.tex
+pdflatex main.tex
 ```
 
 Output: `main.pdf`
