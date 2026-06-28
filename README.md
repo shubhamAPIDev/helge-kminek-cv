@@ -27,6 +27,19 @@ pdflatex main.tex
 pdflatex main.tex
 ```
 
+## Word export (.docx)
+
+Helge can edit the CV in Microsoft Word without Overleaf. Regenerate after any content change:
+
+```bash
+brew install pandoc   # once
+bash tools/tex2docx/convert_to_docx.sh
+```
+
+Output: `Helge_Kminek_Lebenslauf.docx` in the repo root.
+
+See `tools/tex2docx/README.md` for details. Conversion uses [Pandoc](https://pandoc.org/) with a CV-specific preprocessor (inspired by [tex2docx](https://github.com/jay-dennis/tex2docx) and [pandoc-tutorial](https://github.com/wmvanvliet/pandoc-tutorial)).
+
 ## Note
 
 Helge's full academic CV is long (~many pages). arasgungore's original template is a short 2-page résumé; the **same code patterns** are applied throughout, but the document is longer because of the amount of content.
