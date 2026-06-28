@@ -93,17 +93,20 @@ def strip_outer(text: str) -> str:
 
 
 def expand_subheading(args: list[str]) -> str:
+    # arasgungore \resumeSubheading{title}{date}{subtitle}{location}: #2 is the
+    # right-aligned date column in the PDF. In the linear Word output we lead with
+    # the date so every entry reads date-first, instead of trailing "title (date)".
     a, b, c, d = (strip_outer(x) for x in (args + ["", "", "", ""])[:4])
     lines: list[str] = ["\\item"]
+    header_parts: list[str] = []
+    if b:
+        header_parts.append(f"\\textbf{{{b}}}")
     if a:
-        line = f"\\textbf{{{a}}}"
-        if b:
-            line += f" (\\textit{{{b}}})"
-        lines.append(line)
-    elif b:
-        lines.append(f"\\textit{{{b}}}")
+        header_parts.append(a)
+    if header_parts:
+        lines.append(" ".join(header_parts))
     if c:
-        lines.append(c)
+        lines.append(f"\\textit{{{c}}}")
     if d:
         lines.append(f"\\textit{{{d}}}")
     return "\n".join(lines) + "\n"
