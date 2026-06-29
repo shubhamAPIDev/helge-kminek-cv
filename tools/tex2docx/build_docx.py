@@ -246,6 +246,17 @@ def _gap(doc, points: float):
     p.add_run("").font.size = Pt(points)
 
 
+def _set_base_font(doc, name: str, size: float):
+    """Set the default document font reliably (style font.name alone is flaky)."""
+    style = doc.styles["Normal"]
+    style.font.name = name
+    style.font.size = Pt(size)
+    rpr = style.element.get_or_add_rPr()
+    rfonts = rpr.get_or_add_rFonts()
+    for attr in ("w:ascii", "w:hAnsi", "w:cs"):
+        rfonts.set(qn(attr), name)
+
+
 def render(name, contacts, sections, output: Path):
     doc = Document()
     for sec in doc.sections:
@@ -253,31 +264,33 @@ def render(name, contacts, sections, output: Path):
         sec.bottom_margin = Inches(0.6)
         sec.left_margin = Inches(0.85)
         sec.right_margin = Inches(0.85)
-    doc.styles["Normal"].font.name = "Calibri"
-    doc.styles["Normal"].font.size = Pt(10)
+    # Serif body font (Times New Roman) to match the PDF's Computer Modern look.
+    # Times is used because it is available on every Word install (Mac/Windows),
+    # so the file renders identically for the recipient.
+    _set_base_font(doc, "Times New Roman", 11)
 
-    # Header: name + contact lines, centered
+    # Header: name (large small caps) + contact lines, centered
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p.paragraph_format.space_after = Pt(2)
     r = p.add_run(name)
-    r.bold = True
-    r.font.size = Pt(20)
+    r.font.size = Pt(22)
+    r.font.small_caps = True
     for idx, line in enumerate(contacts):
         p = doc.add_paragraph()
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         _no_space(p)
         r = p.add_run(line)
-        r.font.size = Pt(10)
+        r.font.size = Pt(11)
         r.italic = idx == 0  # "Lebenslauf" subtitle
 
     for title, entries in sections:
         head = doc.add_paragraph()
         head.paragraph_format.space_before = Pt(12)
         head.paragraph_format.space_after = Pt(4)
-        r = head.add_run(title.upper())
-        r.bold = True
-        r.font.size = Pt(11)
+        r = head.add_run(title)  # small caps render the section title like the PDF
+        r.font.small_caps = True
+        r.font.size = Pt(13)
         _bottom_rule(head)
 
         for e in entries:
@@ -322,30 +335,29 @@ def _render_subheading(doc, e: Subheading):
     if e.org:
         r = p.add_run(e.org)
         r.bold = True
-        r.font.size = Pt(10.5)
+        r.font.size = Pt(11)
         first_used = True
     if e.role:
         rp = p if not first_used else left.add_paragraph()
         _no_space(rp)
         r = rp.add_run(e.role)
         r.italic = True
-        r.font.size = Pt(10)
+        r.font.size = Pt(10.5)
 
-    # Right cell: date (bold), then location (italic), right-aligned
+    # Right cell: date (regular, like the PDF), then location (italic), right-aligned
     p = right.paragraphs[0]
     _no_space(p)
     p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     if e.date:
         r = p.add_run(e.date)
-        r.bold = True
-        r.font.size = Pt(10)
+        r.font.size = Pt(11)
     if e.loc:
         lp = right.add_paragraph()
         _no_space(lp)
         lp.alignment = WD_ALIGN_PARAGRAPH.RIGHT
         r = lp.add_run(e.loc)
         r.italic = True
-        r.font.size = Pt(10)
+        r.font.size = Pt(10.5)
 
     for runs in e.bullets:
         bp = doc.add_paragraph(style="List Bullet")
