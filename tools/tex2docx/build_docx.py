@@ -356,7 +356,13 @@ def _render_subheading(doc, e: Subheading):
     left.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.TOP
     right.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.TOP
 
-    # Left cell: org (bold), then role (italic) on its own line
+    # The 4th field (location) is short for some entries (e.g. a euro amount, kept
+    # right-aligned under the date) but a long sentence for others (e.g. a role like
+    # "Mitglied des Organisationsteams ..."). Long text must go in the wide left
+    # column, otherwise it wraps into a ragged stack in the narrow right column.
+    loc_is_long = len(e.loc) > 22
+
+    # Left cell: org (bold), role (italic), and any long 4th-field text (italic)
     p = left.paragraphs[0]
     _no_space(p)
     first_used = False
@@ -371,15 +377,22 @@ def _render_subheading(doc, e: Subheading):
         r = rp.add_run(e.role)
         r.italic = True
         r.font.size = Pt(10.5)
+        first_used = True
+    if e.loc and loc_is_long:
+        rp = p if not first_used else left.add_paragraph()
+        _no_space(rp)
+        r = rp.add_run(e.loc)
+        r.italic = True
+        r.font.size = Pt(10.5)
 
-    # Right cell: date (regular, like the PDF), then location (italic), right-aligned
+    # Right cell: date (regular, like the PDF), then any short 4th field, right-aligned
     p = right.paragraphs[0]
     _no_space(p)
     p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     if e.date:
         r = p.add_run(e.date)
         r.font.size = Pt(11)
-    if e.loc:
+    if e.loc and not loc_is_long:
         lp = right.add_paragraph()
         _no_space(lp)
         lp.alignment = WD_ALIGN_PARAGRAPH.RIGHT
