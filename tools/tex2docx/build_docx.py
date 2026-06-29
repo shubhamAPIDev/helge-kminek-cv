@@ -19,6 +19,7 @@ import sys
 from pathlib import Path
 
 from docx import Document
+from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
@@ -238,6 +239,13 @@ def _add_runs(paragraph, runs: list[Run], size=10):
         r.font.size = Pt(size)
 
 
+def _gap(doc, points: float):
+    """Add a small empty paragraph of a given height (controls vertical spacing)."""
+    p = doc.add_paragraph()
+    _no_space(p)
+    p.add_run("").font.size = Pt(points)
+
+
 def render(name, contacts, sections, output: Path):
     doc = Document()
     for sec in doc.sections:
@@ -264,11 +272,9 @@ def render(name, contacts, sections, output: Path):
         r.italic = idx == 0  # "Lebenslauf" subtitle
 
     for title, entries in sections:
-        gap = doc.add_paragraph()
-        gap.paragraph_format.space_before = Pt(6)
-        gap.paragraph_format.space_after = Pt(0)
         head = doc.add_paragraph()
-        head.paragraph_format.space_after = Pt(3)
+        head.paragraph_format.space_before = Pt(12)
+        head.paragraph_format.space_after = Pt(4)
         r = head.add_run(title.upper())
         r.bold = True
         r.font.size = Pt(11)
@@ -279,8 +285,8 @@ def render(name, contacts, sections, output: Path):
                 _render_subheading(doc, e)
             elif isinstance(e, SubHead):
                 p = doc.add_paragraph()
-                p.paragraph_format.space_before = Pt(5)
-                p.paragraph_format.space_after = Pt(1)
+                p.paragraph_format.space_before = Pt(6)
+                p.paragraph_format.space_after = Pt(2)
                 r = p.add_run(e.title)
                 r.bold = r.italic = True
                 r.font.size = Pt(10)
@@ -297,44 +303,57 @@ def render(name, contacts, sections, output: Path):
 
 
 def _render_subheading(doc, e: Subheading):
-    table = doc.add_table(rows=2, cols=2)
+    # One row, two cells. Left cell stacks org (bold) + role (italic); right cell
+    # stacks date (bold) + location (italic), right-aligned. The date thus sits on
+    # the same top line as the content, with no empty cells/rows to create gaps.
+    table = doc.add_table(rows=1, cols=2)
+    table.autofit = False
     _strip_table_borders(table)
-    table.columns[0].width = Inches(4.8)
-    table.columns[1].width = Inches(2.1)
-    for row in table.rows:
-        for cell in row.cells:
-            for para in cell.paragraphs:
-                _no_space(para)
+    left, right = table.cell(0, 0), table.cell(0, 1)
+    left.width = Inches(4.9)
+    right.width = Inches(2.0)
+    left.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.TOP
+    right.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.TOP
 
-    c = table.cell(0, 0).paragraphs[0]
-    r = c.add_run(e.org)
-    r.bold = True
-    r.font.size = Pt(10.5)
-    c = table.cell(0, 1).paragraphs[0]
-    c.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    r = c.add_run(e.date)
-    r.bold = True
-    r.font.size = Pt(10)
+    # Left cell: org (bold), then role (italic) on its own line
+    p = left.paragraphs[0]
+    _no_space(p)
+    first_used = False
+    if e.org:
+        r = p.add_run(e.org)
+        r.bold = True
+        r.font.size = Pt(10.5)
+        first_used = True
+    if e.role:
+        rp = p if not first_used else left.add_paragraph()
+        _no_space(rp)
+        r = rp.add_run(e.role)
+        r.italic = True
+        r.font.size = Pt(10)
 
-    c = table.cell(1, 0).paragraphs[0]
-    r = c.add_run(e.role)
-    r.italic = True
-    r.font.size = Pt(10)
-    c = table.cell(1, 1).paragraphs[0]
-    c.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    r = c.add_run(e.loc)
-    r.italic = True
-    r.font.size = Pt(10)
+    # Right cell: date (bold), then location (italic), right-aligned
+    p = right.paragraphs[0]
+    _no_space(p)
+    p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    if e.date:
+        r = p.add_run(e.date)
+        r.bold = True
+        r.font.size = Pt(10)
+    if e.loc:
+        lp = right.add_paragraph()
+        _no_space(lp)
+        lp.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+        r = lp.add_run(e.loc)
+        r.italic = True
+        r.font.size = Pt(10)
 
     for runs in e.bullets:
-        p = doc.add_paragraph(style="List Bullet")
-        p.paragraph_format.left_indent = Inches(0.25)
-        _no_space(p)
-        _add_runs(p, runs)
+        bp = doc.add_paragraph(style="List Bullet")
+        bp.paragraph_format.left_indent = Inches(0.25)
+        _no_space(bp)
+        _add_runs(bp, runs)
 
-    spacer = doc.add_paragraph()
-    spacer.paragraph_format.space_after = Pt(3)
-    _no_space(spacer)
+    _gap(doc, 6)  # breathing room between entries
 
 
 def main() -> int:
