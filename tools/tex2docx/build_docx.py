@@ -222,6 +222,12 @@ def _bottom_rule(paragraph):
     pPr.append(borders)
 
 
+def _keep_row_together(table):
+    """Prevent a table row from splitting across a page break."""
+    trPr = table.rows[0]._tr.get_or_add_trPr()
+    trPr.append(OxmlElement("w:cantSplit"))
+
+
 def _strip_table_borders(table):
     tblPr = table._tbl.tblPr
     borders = OxmlElement("w:tblBorders")
@@ -291,6 +297,7 @@ def render(name, contacts, sections, output: Path):
         r = head.add_run(title)  # small caps render the section title like the PDF
         r.font.small_caps = True
         r.font.size = Pt(13)
+        head.paragraph_format.keep_with_next = True  # don't strand a heading at page bottom
         _bottom_rule(head)
 
         for e in entries:
@@ -300,6 +307,7 @@ def render(name, contacts, sections, output: Path):
                 p = doc.add_paragraph()
                 p.paragraph_format.space_before = Pt(6)
                 p.paragraph_format.space_after = Pt(2)
+                p.paragraph_format.keep_with_next = True  # keep label with its first item
                 r = p.add_run(e.title)
                 r.bold = r.italic = True
                 r.font.size = Pt(10)
@@ -322,6 +330,7 @@ def _render_subheading(doc, e: Subheading):
     table = doc.add_table(rows=1, cols=2)
     table.autofit = False
     _strip_table_borders(table)
+    _keep_row_together(table)  # title/date/role stay together across page breaks
     left, right = table.cell(0, 0), table.cell(0, 1)
     left.width = Inches(4.9)
     right.width = Inches(2.0)
