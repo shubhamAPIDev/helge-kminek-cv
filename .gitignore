@@ -26,5 +26,6 @@
 *~
 .vscode/
 
-# Generated pandoc intermediate
-tools/tex2docx/main-docx.tex
+# Python
+__pycache__/
+*.pyc

@@ -1,18 +1,21 @@
 # LaTeX → Word conversion
 
-Converts `main.tex` + `sections/body.tex` to an editable `.docx` file using [Pandoc](https://pandoc.org/).
+Builds an editable `Helge_Kminek_Lebenslauf.docx` from the LaTeX source
+(`main.tex` + `sections/body.tex`).
 
-This workflow combines ideas from:
+`build_docx.py` parses the arasgungore CV macros directly and renders the Word
+file with [python-docx](https://python-docx.readthedocs.io/), reproducing the
+PDF's layout: a centered header, section titles underlined with a rule, and
+two-column entry rows with the date right-aligned. The output is plain editable
+Word text (borderless tables, no text boxes), so it can be edited without
+touching LaTeX/Overleaf.
 
-- [jay-dennis/tex2docx](https://github.com/jay-dennis/tex2docx) — LaTeX preprocessing before pandoc
-- [wmvanvliet/pandoc-tutorial](https://github.com/wmvanvliet/pandoc-tutorial) — pandoc filters and reference templates
-
-The CV uses custom arasgungore macros that pandoc cannot read directly, so `preprocess_cv.py` expands them into a pandoc-friendly `.tex` file first.
+This is self-contained — no pandoc, no LaTeX install, no external template.
 
 ## Requirements
 
-- [Pandoc](https://pandoc.org/) 3.x (`brew install pandoc`)
 - Python 3
+- `python-docx` (`pip3 install -r tools/tex2docx/requirements.txt`)
 
 ## Usage
 
@@ -22,25 +25,38 @@ From the repository root:
 bash tools/tex2docx/convert_to_docx.sh
 ```
 
-This writes `Helge_Kminek_Lebenslauf.docx` in the repo root.
-
-To choose a different output path:
+This writes `Helge_Kminek_Lebenslauf.docx` in the repo root. To choose a
+different output path:
 
 ```bash
 bash tools/tex2docx/convert_to_docx.sh /path/to/output.docx
+```
+
+Or call the builder directly:
+
+```bash
+python3 tools/tex2docx/build_docx.py [output.docx]
 ```
 
 ## Files
 
 | File | Purpose |
 |------|---------|
-| `preprocess_cv.py` | Inlines body content and rewrites CV macros for pandoc |
-| `convert_to_docx.sh` | Runs preprocess + pandoc |
-| `template.docx` | Optional Word reference styles (from pandoc-tutorial) |
-| `main-docx.tex` | Generated intermediate file (gitignored) |
+| `build_docx.py` | Parses the CV LaTeX and renders the `.docx` |
+| `convert_to_docx.sh` | Convenience wrapper (checks deps, runs the builder) |
+| `requirements.txt` | Python dependency (`python-docx`) |
+
+## Supported macros
+
+`build_docx.py` understands the arasgungore entry macros used in this CV:
+`\resumeSubheading` (org / date / role / location → two-column row),
+`\resumeSubSubheading` (italic sub-heading, e.g. a semester label),
+`\resumeProjectHeading`, and `\resumeItem` / `\resumeSubItem` (bullets).
+Inline `\textbf`/`\textit`/`\emph` and `\href` are preserved.
 
 ## Notes
 
-- The Word file preserves all CV **content** and section structure. Layout differs slightly from the PDF (no two-column date alignment).
-- For submission-quality PDF, compile `main.tex` with pdfLaTeX in Overleaf as before.
+- The Word layout closely mirrors the PDF but is not pixel-identical — Word and
+  LaTeX paginate differently, so the page count may differ.
+- For submission-quality PDF, compile `main.tex` with pdfLaTeX in Overleaf.
 - Regenerate the `.docx` after any edit to `sections/body.tex` or `main.tex`.

@@ -1,32 +1,15 @@
 #!/usr/bin/env bash
-# Convert Helge Kminek CV from LaTeX to Word using pandoc.
-# Based on workflows from:
-#   https://github.com/jay-dennis/tex2docx
-#   https://github.com/wmvanvliet/pandoc-tutorial
+# Build an editable Word (.docx) version of the CV from the LaTeX source.
+# Self-contained: parses main.tex + sections/body.tex and renders with python-docx.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-PREPROCESSED="$SCRIPT_DIR/main-docx.tex"
 OUTPUT="${1:-$REPO_ROOT/Helge_Kminek_Lebenslauf.docx}"
-TEMPLATE="$SCRIPT_DIR/template.docx"
 
-command -v pandoc >/dev/null 2>&1 || {
-  echo "pandoc is required. Install with: brew install pandoc" >&2
+python3 -c "import docx" 2>/dev/null || {
+  echo "python-docx is required. Install with: pip3 install -r $SCRIPT_DIR/requirements.txt" >&2
   exit 1
 }
 
-python3 "$SCRIPT_DIR/preprocess_cv.py" --repo-root "$REPO_ROOT" --output "$PREPROCESSED"
-
-PANDOC_ARGS=(
-  -s "$PREPROCESSED"
-  -f latex+raw_tex
-  -o "$OUTPUT"
-)
-
-if [[ -f "$TEMPLATE" ]]; then
-  PANDOC_ARGS+=(--reference-doc="$TEMPLATE")
-fi
-
-pandoc "${PANDOC_ARGS[@]}"
-echo "Wrote $OUTPUT"
+python3 "$SCRIPT_DIR/build_docx.py" "$OUTPUT"

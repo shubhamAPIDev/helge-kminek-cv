@@ -82,33 +82,17 @@ arasgungore CV template:
 - This was fixed by changing the internal `\resumeSubheading` table columns to wrapping `p{...}` columns while keeping the same visual style.
 - A later alignment/README cleanup looked worse in the PDF, so it was reverted in commit `236236e`.
 
-Direct pandoc conversion:
+Word export — earlier pandoc attempt:
 
-- Running pandoc directly on `main.tex` did not work well.
-- Pandoc could read the header, but it could not understand the custom arasgungore macros such as `\resumeSubheading`, `\resumeProjectHeading`, and `\resumeItem`.
-- Pandoc also does not reproduce the exact PDF layout, especially right-aligned date columns.
+- Pandoc could not read the custom arasgungore macros (`\resumeSubheading`, `\resumeProjectHeading`, `\resumeItem`), so the macros had to be expanded first.
+- Even after expansion, pandoc produced a flat layout: left-aligned header, no section rules, and dates crammed inline rather than right-aligned. It did not look like the PDF.
+- Off-the-shelf LaTeX→docx repos (`jay-dennis/tex2docx`, `wmvanvliet/pandoc-tutorial`) were built around academic papers (equations, figures, citations) and did not fit a resume template.
 
-`jay-dennis/tex2docx` reference repo:
+Word export — current workflow:
 
-- Useful idea: preprocess LaTeX before sending it to pandoc.
-- Not directly usable for this CV because it is built around papers with equations, figures, tables, citations, `refs.bib`, and `pandoc-xnos`.
-- Its script defaults to `Example.tex` and does not know the arasgungore CV macros.
-- We reused the general preprocessing approach, not the script as-is.
-
-`wmvanvliet/pandoc-tutorial` reference repo:
-
-- Useful idea: use pandoc with a Word reference template and customize conversion around pandoc's limits.
-- Not directly usable because its Python filters are specific to one academic paper, with acronyms, figures, citations, and paper-specific commands.
-- The `template.docx` was useful as a Word reference document.
-- Installing extra filter dependencies was unnecessary for this CV because the main problem was macro expansion, not citations or figures.
-
-Current Word conversion workflow:
-
-- Local pandoc was missing at first, so it was installed with Homebrew.
-- Local LaTeX was still not required because the Word export is pandoc-based.
-- The first macro approach using TeX conditionals produced bad Word output with stray `&` characters.
-- The final approach expands the CV macros in Python before running pandoc.
-- The generated Word file is editable and complete, but it is not a pixel-perfect copy of the PDF. Dates are inline rather than right-aligned.
+- Replaced pandoc with a small, self-contained renderer, `tools/tex2docx/build_docx.py`, that parses the arasgungore macros and writes the `.docx` directly with `python-docx`.
+- It reproduces the PDF layout — centered header, section titles with a bottom rule, and two-column entry rows with **right-aligned dates** — while keeping the output as plain editable Word text (borderless tables, no text boxes).
+- No pandoc, no LaTeX install, and no external reference template are needed; the only dependency is `python-docx`.
 
 ## Repository Structure
 
@@ -117,7 +101,7 @@ Current Word conversion workflow:
 | `main.tex` | arasgungore preamble, commands, header, and document wrapper |
 | `sections/body.tex` | Helge's CV content using `\resumeSubheading`, `\resumeItem`, etc. |
 | `Helge_Kminek_Lebenslauf.docx` | Generated editable Word version |
-| `tools/tex2docx/` | Pandoc-based Word conversion workflow |
+| `tools/tex2docx/` | Self-contained LaTeX→Word renderer (`build_docx.py`, python-docx) |
 
 ## LaTeX / PDF Workflow
 
@@ -134,17 +118,15 @@ pdflatex main.tex
 
 ## Word Export Workflow
 
-The Word export uses [Pandoc](https://pandoc.org/) plus a CV-specific preprocessor. It is inspired by:
+The Word export is produced by `tools/tex2docx/build_docx.py`, a small
+self-contained renderer that parses the arasgungore CV macros and writes the
+`.docx` directly with [python-docx](https://python-docx.readthedocs.io/). No
+pandoc, LaTeX install, or external template is required.
 
-- [jay-dennis/tex2docx](https://github.com/jay-dennis/tex2docx)
-- [wmvanvliet/pandoc-tutorial](https://github.com/wmvanvliet/pandoc-tutorial)
-
-Pandoc cannot read the custom arasgungore macros directly, so `tools/tex2docx/preprocess_cv.py` expands them into pandoc-friendly LaTeX first.
-
-Install pandoc once:
+Install the one dependency once:
 
 ```bash
-brew install pandoc
+pip3 install -r tools/tex2docx/requirements.txt
 ```
 
 Regenerate Word after any content edit:
@@ -161,12 +143,13 @@ Helge_Kminek_Lebenslauf.docx
 
 Notes:
 
-- The Word file preserves the CV content and section structure.
-- The Word layout is intentionally more editable than the PDF layout.
-- The PDF remains the best source for exact visual formatting.
+- The Word layout mirrors the PDF — centered header, section rules, and
+  right-aligned dates — and stays plain editable text (no text boxes).
+- It is not pixel-identical: Word and LaTeX paginate differently.
+- The PDF (pdfLaTeX in Overleaf) remains the source for exact visual formatting.
 
 ## Credits
 
 - **Template:** [arasgungore/arasgungore-CV](https://github.com/arasgungore/arasgungore-CV) (MIT)
-- **Conversion references:** [jay-dennis/tex2docx](https://github.com/jay-dennis/tex2docx), [wmvanvliet/pandoc-tutorial](https://github.com/wmvanvliet/pandoc-tutorial)
+- **Word export:** `tools/tex2docx/build_docx.py`, built on [python-docx](https://python-docx.readthedocs.io/)
 - **Content:** Dr. Helge Kminek
