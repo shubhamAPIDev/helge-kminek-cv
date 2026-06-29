@@ -228,6 +228,26 @@ def _keep_row_together(table):
     trPr.append(OxmlElement("w:cantSplit"))
 
 
+def _set_fixed_columns(table, left_in: float, right_in: float):
+    """Force exact column widths (python-docx cell.width alone is ignored by Word/
+    LibreOffice unless the table uses a fixed layout with an explicit grid)."""
+    left_dxa, right_dxa = int(left_in * 1440), int(right_in * 1440)
+    tbl = table._tbl
+    tblPr = tbl.tblPr
+    layout = OxmlElement("w:tblLayout")
+    layout.set(qn("w:type"), "fixed")
+    tblPr.append(layout)
+    tblW = OxmlElement("w:tblW")
+    tblW.set(qn("w:w"), str(left_dxa + right_dxa))
+    tblW.set(qn("w:type"), "dxa")
+    tblPr.append(tblW)
+    grid = tbl.find(qn("w:tblGrid"))
+    for col, w in zip(grid.findall(qn("w:gridCol")), (left_dxa, right_dxa)):
+        col.set(qn("w:w"), str(w))
+    for cell, w in zip(table.rows[0].cells, (left_in, right_in)):
+        cell.width = Inches(w)
+
+
 def _strip_table_borders(table):
     tblPr = table._tbl.tblPr
     borders = OxmlElement("w:tblBorders")
@@ -268,8 +288,8 @@ def render(name, contacts, sections, output: Path):
     for sec in doc.sections:
         sec.top_margin = Inches(0.6)
         sec.bottom_margin = Inches(0.6)
-        sec.left_margin = Inches(0.85)
-        sec.right_margin = Inches(0.85)
+        sec.left_margin = Inches(0.7)
+        sec.right_margin = Inches(0.7)
     # Serif body font (Times New Roman) to match the PDF's Computer Modern look.
     # Times is used because it is available on every Word install (Mac/Windows),
     # so the file renders identically for the recipient.
@@ -292,8 +312,8 @@ def render(name, contacts, sections, output: Path):
 
     for title, entries in sections:
         head = doc.add_paragraph()
-        head.paragraph_format.space_before = Pt(12)
-        head.paragraph_format.space_after = Pt(4)
+        head.paragraph_format.space_before = Pt(8)
+        head.paragraph_format.space_after = Pt(3)
         r = head.add_run(title)  # small caps render the section title like the PDF
         r.font.small_caps = True
         r.font.size = Pt(13)
@@ -332,8 +352,7 @@ def _render_subheading(doc, e: Subheading):
     _strip_table_borders(table)
     _keep_row_together(table)  # title/date/role stay together across page breaks
     left, right = table.cell(0, 0), table.cell(0, 1)
-    left.width = Inches(4.9)
-    right.width = Inches(2.0)
+    _set_fixed_columns(table, 5.5, 1.6)
     left.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.TOP
     right.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.TOP
 
@@ -374,7 +393,7 @@ def _render_subheading(doc, e: Subheading):
         _no_space(bp)
         _add_runs(bp, runs)
 
-    _gap(doc, 6)  # breathing room between entries
+    _gap(doc, 3)  # breathing room between entries
 
 
 def main() -> int:
