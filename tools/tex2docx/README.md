@@ -56,7 +56,7 @@ Inline `\textbf`/`\textit`/`\emph` and `\href` are preserved.
 
 ## Notes
 
-- The Word layout closely mirrors the PDF but is not pixel-identical — Word and
-  LaTeX paginate differently, so the page count may differ.
-- For submission-quality PDF, compile `main.tex` with pdfLaTeX in Overleaf.
-- Regenerate the `.docx` after any edit to `sections/body.tex` or `main.tex`.
+- The Word file is the deliverable that is edited and shared; the PDF is exported
+  from Word (File → Save As → PDF) so the two always match.
+- This generator is only needed when the content is edited in the LaTeX source;
+  regenerate the `.docx` after any edit to `sections/body.tex` or `main.tex`.
