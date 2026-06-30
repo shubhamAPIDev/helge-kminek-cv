@@ -120,8 +120,8 @@ class SubHead:  # sub-subheading (e.g. semester label)
 
 
 class Line:  # project heading / standalone bullet
-    def __init__(self, runs, bullet=False):
-        self.runs, self.bullet = runs, bullet
+    def __init__(self, runs, bullet=False, date=""):
+        self.runs, self.bullet, self.date = runs, bullet, date
 
 
 TOKEN = re.compile(
@@ -150,8 +150,10 @@ def parse_section(content: str) -> list:
             entries.append(SubHead(clean_text(args[0]) if args else ""))
             open_sub = None
         elif kind == "resumeProjectHeading":
-            args, pos = get_args(content, m.end(), 1)
-            entries.append(Line(parse_runs(args[0] if args else "")))
+            args, pos = get_args(content, m.end(), 2)
+            text = args[0] if args else ""
+            date = clean_text(args[1]) if len(args) > 1 else ""
+            entries.append(Line(parse_runs(text), date=date))
             open_sub = None
         else:  # resumeItem / resumeSubItem
             args, pos = get_args(content, m.end(), 1)
@@ -331,7 +333,10 @@ def render(name, contacts, sections, output: Path):
                 r = p.add_run(e.title)
                 r.bold = r.italic = True
                 r.font.size = Pt(10)
-            else:  # Line
+            elif isinstance(e, Line) and e.date:
+                # project heading with a date: text left, date right, single row
+                _render_line_with_date(doc, e)
+            else:  # Line (label or standalone bullet)
                 p = doc.add_paragraph(style="List Bullet" if e.bullet else None)
                 if e.bullet:
                     p.paragraph_format.left_indent = Inches(0.25)
@@ -407,6 +412,26 @@ def _render_subheading(doc, e: Subheading):
         _add_runs(bp, runs)
 
     _gap(doc, 3)  # breathing room between entries
+
+
+def _render_line_with_date(doc, e: Line):
+    """A single-row entry: text left (wraps), date right-aligned."""
+    table = doc.add_table(rows=1, cols=2)
+    table.autofit = False
+    _strip_table_borders(table)
+    _keep_row_together(table)
+    left, right = table.cell(0, 0), table.cell(0, 1)
+    _set_fixed_columns(table, 5.5, 1.6)
+    left.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.TOP
+    right.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.TOP
+    lp = left.paragraphs[0]
+    _no_space(lp)
+    _add_runs(lp, e.runs, size=10.5)
+    rp = right.paragraphs[0]
+    _no_space(rp)
+    rp.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    rp.add_run(e.date).font.size = Pt(10.5)
+    _gap(doc, 2)
 
 
 def main() -> int:
