@@ -248,6 +248,19 @@ def _set_fixed_columns(table, left_in: float, right_in: float):
         col.set(qn("w:w"), str(w))
     for cell, w in zip(table.rows[0].cells, (left_in, right_in)):
         cell.width = Inches(w)
+    # Zero the cell padding and table indent so entry text is flush-left, lining up
+    # with the plain (non-table) section labels above/below it.
+    ind = OxmlElement("w:tblInd")
+    ind.set(qn("w:w"), "0")
+    ind.set(qn("w:type"), "dxa")
+    tblPr.append(ind)
+    cellMar = OxmlElement("w:tblCellMar")
+    for side in ("left", "right"):
+        e = OxmlElement(f"w:{side}")
+        e.set(qn("w:w"), "0")
+        e.set(qn("w:type"), "dxa")
+        cellMar.append(e)
+    tblPr.append(cellMar)
 
 
 def _strip_table_borders(table):
@@ -336,11 +349,16 @@ def render(name, contacts, sections, output: Path):
             elif isinstance(e, Line) and e.date:
                 # project heading with a date: text left, date right, single row
                 _render_line_with_date(doc, e)
-            else:  # Line (label or standalone bullet)
-                p = doc.add_paragraph(style="List Bullet" if e.bullet else None)
-                if e.bullet:
-                    p.paragraph_format.left_indent = Inches(0.25)
+            elif isinstance(e, Line) and e.bullet:
+                p = doc.add_paragraph(style="List Bullet")
+                p.paragraph_format.left_indent = Inches(0.25)
                 _no_space(p)
+                _add_runs(p, e.runs)
+            else:  # Line: a bold section sub-label (e.g. Buchreihe, Editorial Advisor)
+                p = doc.add_paragraph()
+                p.paragraph_format.space_before = Pt(8)  # breathing room above the label
+                p.paragraph_format.space_after = Pt(2)
+                p.paragraph_format.keep_with_next = True  # keep label with what follows
                 _add_runs(p, e.runs)
 
     output.parent.mkdir(parents=True, exist_ok=True)
