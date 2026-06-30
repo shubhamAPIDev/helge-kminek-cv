@@ -322,7 +322,7 @@ def render(name, contacts, sections, output: Path):
         head.paragraph_format.keep_with_next = True  # don't strand a heading at page bottom
         _bottom_rule(head)
 
-        for e in entries:
+        for idx, e in enumerate(entries):
             if isinstance(e, Subheading):
                 _render_subheading(doc, e)
             elif isinstance(e, SubHead):
@@ -333,6 +333,11 @@ def render(name, contacts, sections, output: Path):
                 r = p.add_run(e.title)
                 r.bold = r.italic = True
                 r.font.size = Pt(10)
+                # Empty sub-heading (no items follow before the next heading): leave a
+                # blank line so courses/content can be filled in by hand later.
+                nxt = entries[idx + 1] if idx + 1 < len(entries) else None
+                if nxt is None or isinstance(nxt, SubHead):
+                    _gap(doc, 13)
             elif isinstance(e, Line) and e.date:
                 # project heading with a date: text left, date right, single row
                 _render_line_with_date(doc, e)
