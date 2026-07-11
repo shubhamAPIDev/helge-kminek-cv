@@ -1,7 +1,7 @@
-# LaTeX → Word conversion
+# LaTeX → Word + PDF conversion
 
-Builds an editable `Helge_Kminek_Lebenslauf.docx` from the LaTeX source
-(`main.tex` + `sections/body.tex`).
+Builds `Helge_Kminek_Lebenslauf.docx` and `Helge_Kminek_Lebenslauf.pdf` from the
+LaTeX source (`main.tex` + `sections/body.tex`) in one command.
 
 `build_docx.py` parses the arasgungore CV macros directly and renders the Word
 file with [python-docx](https://python-docx.readthedocs.io/), reproducing the
@@ -16,6 +16,7 @@ This is self-contained — no pandoc, no LaTeX install, no external template.
 
 - Python 3
 - `python-docx` (`pip3 install -r tools/tex2docx/requirements.txt`)
+- LibreOffice (`soffice`) for the automatic PDF export from the generated Word file
 
 ## Usage
 
@@ -25,8 +26,8 @@ From the repository root:
 bash tools/tex2docx/convert_to_docx.sh
 ```
 
-This writes `Helge_Kminek_Lebenslauf.docx` in the repo root. To choose a
-different output path:
+This writes `Helge_Kminek_Lebenslauf.docx` and `Helge_Kminek_Lebenslauf.pdf` in
+the repo root. To choose a different output path:
 
 ```bash
 bash tools/tex2docx/convert_to_docx.sh /path/to/output.docx
@@ -43,7 +44,7 @@ python3 tools/tex2docx/build_docx.py [output.docx]
 | File | Purpose |
 |------|---------|
 | `build_docx.py` | Parses the CV LaTeX and renders the `.docx` |
-| `convert_to_docx.sh` | Convenience wrapper (checks deps, runs the builder) |
+| `convert_to_docx.sh` | One-step wrapper: builds `.docx`, then exports matching `.pdf` |
 | `requirements.txt` | Python dependency (`python-docx`) |
 
 ## Supported macros
@@ -56,7 +57,6 @@ Inline `\textbf`/`\textit`/`\emph` and `\href` are preserved.
 
 ## Notes
 
-- The Word file is the deliverable that is edited and shared; the PDF is exported
-  from Word (File → Save As → PDF) so the two always match.
-- This generator is only needed when the content is edited in the LaTeX source;
-  regenerate the `.docx` after any edit to `sections/body.tex` or `main.tex`.
+- The PDF is always exported directly from the generated Word file (LibreOffice),
+  so the two deliverables stay in sync without manual Word steps.
+- Re-run the script after any edit to `sections/body.tex` or `main.tex`.

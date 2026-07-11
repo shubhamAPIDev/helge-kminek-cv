@@ -26,9 +26,18 @@ Both files are kept in sync: the PDF is simply the Word document exported to PDF
 **To change the content:** open `Helge_Kminek_Lebenslauf.docx` in Word and type
 your edits. No special software, no LaTeX, no Overleaf required.
 
-**To refresh the PDF after editing:** in Word, choose
-**File → Save As** (or **Print**) and select **PDF** as the format. The PDF will
-then reflect the latest Word content.
+**To refresh both files after editing the LaTeX source:**
+
+```bash
+bash tools/tex2docx/convert_to_docx.sh
+```
+
+This rebuilds `Helge_Kminek_Lebenslauf.docx` and then exports
+`Helge_Kminek_Lebenslauf.pdf` directly from that Word file (via LibreOffice), so
+the two always match without opening Word manually.
+
+If you edit the `.docx` directly in Word instead, re-run the same command or
+export the PDF from Word once (`File → Save As → PDF`).
 
 > Three teaching semesters (Wintersemester 2024/25, Sommersemester 2025,
 > Wintersemester 2025/26) currently show the placeholder bullet
@@ -114,17 +123,16 @@ The layout follows a clean, single-column academic style:
 | `tools/tex2docx/convert_to_docx.sh` | Convenience wrapper for the generator |
 | `tools/tex2docx/requirements.txt` | Sole dependency (`python-docx`) |
 
-### Regenerating the Word file from source (optional, for maintainers)
+### Regenerating Word + PDF from source (optional, for maintainers)
 
-The Word document can be rebuilt from the LaTeX source at any time:
+Both deliverables can be rebuilt from the LaTeX source in one command:
 
 ```bash
 pip3 install -r tools/tex2docx/requirements.txt   # once
-bash tools/tex2docx/convert_to_docx.sh            # writes Helge_Kminek_Lebenslauf.docx
+bash tools/tex2docx/convert_to_docx.sh            # writes .docx and .pdf
 ```
 
-This is only needed if the content is edited in the LaTeX source. Day to day, the
-Word file is edited directly.
+Requires LibreOffice (`soffice`) for the automatic PDF export step.
 
 ---
 
