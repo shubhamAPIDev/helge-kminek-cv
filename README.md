@@ -16,7 +16,7 @@ Teaching gaps for AAU Klagenfurt have been filled from the shared CV:
 - **Sommersemester 2025**: Forschungskolloquium I; Sustainable Development II; Sustainability and Fake News; Gebundene Wahlfächer: Schul- und Unterrichtsanalyse entlang und mit der Romanreihe Harry Potter
 - **Wintersemester 2024/2025**: Cultural Sustainability; Sustainable Development I
 
-The editable DOCX and matching PDF for this version are available as the primary deliverables. Due to binary upload constraints in the tooling used to update this repository, the files may need to be regenerated locally from the LaTeX source or the original DOCX can be placed here manually.
+The LaTeX source is up to date. To generate a fresh DOCX + PDF that includes these changes, run the commands below.
 
 ---
 
@@ -31,23 +31,23 @@ Both files are kept in sync: the PDF is simply the Word document exported to PDF
 
 ---
 
-## How to edit and update
+## How to generate / update the CV
 
-**To change the content:** open `Helge_Kminek_Lebenslauf.docx` in Word and type
-your edits. No special software, no LaTeX, no Overleaf required.
-
-**To refresh both files after editing the LaTeX source:**
+**To generate a fresh Word + PDF from the LaTeX source** (includes the filled teaching data):
 
 ```bash
-bash tools/tex2docx/convert_to_docx.sh
+pip3 install -r tools/tex2docx/requirements.txt   # once
+bash tools/tex2docx/convert_to_docx.sh            # writes .docx and .pdf
 ```
 
-This rebuilds `Helge_Kminek_Lebenslauf.docx` and then exports
-`Helge_Kminek_Lebenslauf.pdf` directly from that Word file (via LibreOffice), so
-the two always match without opening Word manually.
+Requires LibreOffice (`soffice`) for the PDF export step.
 
-If you edit the `.docx` directly in Word instead, re-run the same command or
-export the PDF from Word once (`File → Save As → PDF`).
+This rebuilds `Helge_Kminek_Lebenslauf.docx` and then exports
+`Helge_Kminek_Lebenslauf.pdf` directly from that Word file, so the two always match.
+
+**To change content later:**
+- Edit `sections/body.tex` (or the generated `.docx` in Word), then re-run the same command above.
+- Or edit the `.docx` directly and export PDF from Word (`File → Save As → PDF`).
 
 ---
 
@@ -125,9 +125,7 @@ The layout follows a clean, single-column academic style:
 | `tools/tex2docx/convert_to_docx.sh` | Convenience wrapper for the generator |
 | `tools/tex2docx/requirements.txt` | Sole dependency (`python-docx`) |
 
-### Regenerating Word + PDF from source (optional, for maintainers)
-
-Both deliverables can be rebuilt from the LaTeX source in one command:
+### Regenerating Word + PDF from source
 
 ```bash
 pip3 install -r tools/tex2docx/requirements.txt   # once
