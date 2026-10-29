@@ -10,6 +10,12 @@ third-party funding, committee work, fellowships, and memberships.
 
 **Latest version:** 26.10.2026 (updated from the version shared by Dr. Kminek on 26.10.2026).
 
+Teaching gaps for AAU Klagenfurt have been filled from the shared CV:
+- **Wintersemester 2026/2027**: Aktuelle Herausforderungen in Schule und Unterricht; Planetary Boundaries and (Non-)Sustainability
+- **Wintersemester 2025/2026**: Sustainable Development I; Sustainable Development I (Parallelgruppe); Planetary Boundaries and (Non-)Sustainability
+- **Sommersemester 2025**: Forschungskolloquium I; Sustainable Development II; Sustainability and Fake News; Gebundene Wahlfächer: Schul- und Unterrichtsanalyse entlang und mit der Romanreihe Harry Potter
+- **Wintersemester 2024/2025**: Cultural Sustainability; Sustainable Development I
+
 The editable DOCX and matching PDF for this version are available as the primary deliverables. Due to binary upload constraints in the tooling used to update this repository, the files may need to be regenerated locally from the LaTeX source or the original DOCX can be placed here manually.
 
 ---
@@ -42,11 +48,6 @@ the two always match without opening Word manually.
 
 If you edit the `.docx` directly in Word instead, re-run the same command or
 export the PDF from Word once (`File → Save As → PDF`).
-
-> Three teaching semesters (Wintersemester 2024/25, Sommersemester 2025,
-> Wintersemester 2025/26) currently show the placeholder bullet
-> *"Lehrveranstaltungen werden ergänzt."* Replace each placeholder with the
-> actual course titles, then remove any that remain unused before sending the CV.
 
 ---
 
@@ -82,10 +83,7 @@ The layout follows a clean, single-column academic style:
    notice).
 5. **Outdated "Ausblick" labels removed** — from both the teaching list and the
    Vorträge section.
-6. **AAU Klagenfurt teaching expanded** — Sommersemester 2026 listed with its
-   courses; headings added for **Wintersemester 2024/2025, Sommersemester 2025,
-   and Wintersemester 2025/2026** (with placeholder bullets to be completed); and
-   Sommersemester 2024 noted as having no teaching.
+6. **AAU Klagenfurt teaching filled** — placeholders for WS 2024/25, SS 2025, WS 2025/26 replaced with actual courses from the 26.10.2026 CV; WS 2026/27 added.
 7. **Works "in Vorbereitung" retained** — the monograph and several
    working-title articles were kept in, per Dr. Kminek's request to review them
    himself.
