@@ -8,7 +8,9 @@ The CV covers his qualifications, professional career, teaching record,
 publications, talks, event organisation, editorial and reviewing roles,
 third-party funding, committee work, fellowships, and memberships.
 
-**Latest version:** 26.10.2026 (updated from the version shared by Dr. Kminek).
+**Latest version:** 26.10.2026 (updated from the version shared by Dr. Kminek on 26.10.2026).
+
+The editable DOCX and matching PDF for this version are available as the primary deliverables. Due to binary upload constraints in the tooling used to update this repository, the files may need to be regenerated locally from the LaTeX source or the original DOCX can be placed here manually.
 
 ---
 
