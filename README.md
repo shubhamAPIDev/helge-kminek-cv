@@ -8,6 +8,8 @@ The CV covers his qualifications, professional career, teaching record,
 publications, talks, event organisation, editorial and reviewing roles,
 third-party funding, committee work, fellowships, and memberships.
 
+**Latest version:** 26.10.2026 (updated from the version shared by Dr. Kminek).
+
 ---
 
 ## Deliverables
